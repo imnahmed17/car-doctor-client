@@ -1,0 +1,38 @@
+[
+    {
+        "title": "Car Engine Plug",
+        "img": "https://i.ibb.co/HnjKsSr/6.png",
+        "rating": 4.2,
+        "price": 5
+    },
+    {
+        "title": "Car Air Filter",
+        "img": "https://i.ibb.co/StTzm5q/3.png",
+        "rating": 4.9,
+        "price": 20
+    },
+    {
+        "title": "Cools Led Light",
+        "img": "https://i.ibb.co/5GLCBFJ/1.png",
+        "rating": 4.6,
+        "price": 10
+    },
+    {
+        "title": "Car Suspension",
+        "img": "https://i.ibb.co/SykWSN5/2.png",
+        "rating": 4.4,
+        "price": 10
+    },
+    {
+        "title": "Car Tier",
+        "img": "https://i.ibb.co/QNBKZ07/5.png",
+        "rating": 4.7,
+        "price": 15
+    },
+    {
+        "title": "Car Battery",
+        "img": "https://i.ibb.co/yy4Ykwy/4.png",
+        "rating": 4.5,
+        "price": 15
+    }
+]
