@@ -1,79 +1,93 @@
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../providers/AuthProvider';
-import BookingRow from './BookingRow';
-import Swal from 'sweetalert2';
-import useTitle from '../../hooks/useTitle';
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../providers/AuthProvider";
+import BookingRow from "./BookingRow";
+import Swal from "sweetalert2";
+import useTitle from "../../hooks/useTitle";
 
 const Bookings = () => {
     const { user } = useContext(AuthContext);
     const [bookings, setBookings] = useState([]);
-    useTitle('My Bookings');
+    const navigate = useNavigate();
+    useTitle("My Bookings");
 
-    const url = `http://localhost:5000/bookings?email=${user?.email}`;
+    const url = `https://car-doctor-server-five-sepia.vercel.app/bookings?email=${user?.email}`;
     useEffect(() => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => setBookings(data));
-    }, [url]);
+        fetch(url, {
+            method: "GET",
+            headers: {
+                authorization: `Bearer ${localStorage.getItem("car-access-token")}`
+            }
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (!data.error) {
+                    setBookings(data);
+                } else {
+                    // logout and then navigate
+                    navigate("/");
+                }
+            });
+    }, [url, navigate]);
 
-    const handleDelete = id => {
+    const handleDelete = (id) => {
         Swal.fire({
-            title: 'Are you sure?',
+            title: "Are you sure?",
             text: "You won't be able to revert this!",
-            icon: 'warning',
+            icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#F87272',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!'
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#F87272",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:5000/bookings/${id}`, {
-                    method: 'DELETE'
+                fetch(`https://car-doctor-server-five-sepia.vercel.app/bookings/${id}`, {
+                    method: "DELETE"
                 })
-                    .then(res => res.json())
-                    .then(data => {
+                    .then((res) => res.json())
+                    .then((data) => {
                         console.log(data);
                         if (data.deletedCount > 0) {
                             Swal.fire({
-                                title: 'Deleted!',
+                                title: "Deleted!",
                                 text: "Your booking has been deleted.",
-                                icon: 'success',
+                                icon: "success",
                                 showConfirmButton: false,
-                                timer: 900
+                                timer: 900,
                             });
-                            const remaining = bookings.filter(booking => booking._id !== id);
+                            const remaining = bookings.filter((booking) => booking._id !== id);
                             setBookings(remaining);
                         }
                     });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire({
-                    title: 'Cancelled!',
+                    title: "Cancelled!",
                     text: "Your booking is safe :)",
-                    icon: 'error',
+                    icon: "error",
                     showConfirmButton: false,
-                    timer: 900
+                    timer: 900,
                 });
             }
         });
     };
 
-    const handleBookingConfirm = id => {
-        fetch(`http://localhost:5000/bookings/${id}`, {
-            method: 'PATCH',
+    const handleBookingConfirm = (id) => {
+        fetch(`https://car-doctor-server-five-sepia.vercel.app/bookings/${id}`, {
+            method: "PATCH",
             headers: {
-                'content-type': 'application/json'
+                "content-type": "application/json",
             },
-            body: JSON.stringify({ status: 'confirm' })
+            body: JSON.stringify({ status: "confirm" })
         })
-            .then(res => res.json())
-            .then(data => {
+            .then((res) => res.json())
+            .then((data) => {
                 console.log(data);
                 if (data.modifiedCount > 0) {
                     // update state
-                    const remaining = bookings.filter(booking => booking._id !== id);
-                    const updated = bookings.find(booking => booking._id === id);
-                    updated.status = 'confirm';
+                    const remaining = bookings.filter((booking) => booking._id !== id);
+                    const updated = bookings.find((booking) => booking._id === id);
+                    updated.status = "confirm";
                     const newBookings = [updated, ...remaining];
                     setBookings(newBookings);
                 }
@@ -101,14 +115,14 @@ const Bookings = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            bookings.map(booking => <BookingRow
+                        {bookings.map((booking) => (
+                            <BookingRow
                                 key={booking._id}
                                 booking={booking}
                                 handleDelete={handleDelete}
                                 handleBookingConfirm={handleBookingConfirm}
-                            />)
-                        }
+                            />
+                        ))}
                     </tbody>
                 </table>
             </div>

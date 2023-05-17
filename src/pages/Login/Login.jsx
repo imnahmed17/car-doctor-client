@@ -3,9 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
 import img from '../../assets/images/login/login.svg';
 import useTitle from '../../hooks/useTitle';
+import SocialLogin from '../Shared/SocialLogin/SocialLogin';
 
 const Login = () => {
-    const { signIn, resetPassword } = useContext(AuthContext);
+    const { signIn, resetPassword, googleSignIn } = useContext(AuthContext);
     const [error, setError] = useState('');
     const emailRef = useRef();
     const navigate = useNavigate();
@@ -50,6 +51,18 @@ const Login = () => {
             });
     };
 
+    const handleGoogleSignIn = () => {
+        googleSignIn()
+            .then(result => {
+                console.log(result.user);
+                setError('');
+                navigate(from, { replace: true });
+            })
+            .catch(error => {
+                setError(error.message);
+            });
+    };
+
     return (
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content flex-col lg:flex-row">
@@ -80,6 +93,7 @@ const Login = () => {
                             </div>
                         </form>
                         <p className='mt-4 text-center'>New to Car Doctors <Link className='text-orange-600 font-bold' to="/signup">Sign Up</Link></p>
+                        <SocialLogin handleGoogleSignIn={handleGoogleSignIn} />
                         <p className="text-sm text-center text-error">{error}</p>
                     </div>
                 </div>

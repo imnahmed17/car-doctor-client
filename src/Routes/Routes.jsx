@@ -14,32 +14,32 @@ const router = createBrowserRouter([
         element: <Main />,
         children: [
             {
-                path: '/',
+                path: "/",
                 element: <Home />
             },
             {
-                path: 'login', 
+                path: "login",
                 element: <Login />
             },
             {
-                path: 'signup', 
+                path: "signup",
                 element: <SignUp />
             },
             {
-                path: 'booking/:id', 
+                path: "booking/:id",
                 element: <PrivateRoute><BookService /></PrivateRoute>,
-                loader: ({ params }) => fetch(`http://localhost:5000/services/${params.id}`)
+                loader: ({ params }) => fetch(`https://car-doctor-server-five-sepia.vercel.app/services/${params.id}`)
             },
             {
-                path: 'bookings', 
+                path: "bookings",
                 element: <PrivateRoute><Bookings /></PrivateRoute>
             },
             {
-                path: '*',
+                path: "*",
                 element: <ErrorPage />
             }
         ]
-    },
+    }
 ]);
 
 export default router;
