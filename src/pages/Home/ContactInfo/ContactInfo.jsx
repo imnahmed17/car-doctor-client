@@ -4,7 +4,7 @@ import location from '../../../assets/icons/location.png';
 
 const ContactInfo = () => {
     return (
-        <div className="mt-28 bg-slate-300 rounded-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-28 bg-slate-300 rounded-xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 shadow-lg">
             <div className="card w-96 px-10 py-16 ">
                 <div className='flex items-center gap-3'>
                     <img src={calendar} alt="" className="h-2/3" />
